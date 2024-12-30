@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<style>
+		*{
+			font-family: 'Montserrat';
+		}
+
+		body{
+			background-color: rgb(208, 210, 211);
+			overflow: hidden;
+		}
+
+		.main{
+			display: grid;
+			place-items: center;
+			margin-top: 50vh;
+			transform: translateY(-50%);
+		}
+
+		.container{
+			display: flex;
+			flex-direction: column;
+		}
+
+		#btn{
+			width: fit-content;
+			background-color: rgb(71, 77, 82);
+			padding: 10px;
+			border-radius: 10px;
+			color: rgb(211, 212, 213);
+			border: none;
+			font-weight: 600;
+			margin-top: 10px;
+		}
+
+
+
+		#bt::file-selector-button{
+			width: fit-content;
+			background-color: rgb(71, 77, 82);
+			padding: 5px;
+			border-radius: 8px;
+			color: rgb(211, 212, 213);
+			border: none;
+			font-weight: 400;
+		}
+
+		#btn:hover{
+			background-color: rgb(104, 112, 119);
+		}
+
+		.input-box{
+			border-radius: 5px;
+			padding: 5px;
+			border: none;
+		}
+
+		.input-box:focus, textarea:focus{
+			border: 1px solid rgb(79, 78, 78);
+			outline: none;
+		}
+
+		.preview{
+			margin-top: 10px;
+			border-radius: 10px;
+			height: 80px;
+			width: 120px;
+			overflow: hidden;
+			display: none;
+			object-fit: cover;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="main">
+		<h1>Add Product</h1>
+		<form action="http://localhost/apiPhp/connectWithImage.php" method="post" enctype="multipart/form-data">
+			<div class="container">
+
+			<p>
+			  <label class = "input-heading" for="name">Product Name:</label>
+			  <br></br>
+			  <input class = "input-box" type="text" id="prod_name" name="prod_name" placeholder='Ex: Mango'/>
+			</p>
+			<p>
+			  <label class = "input-heading" for="phone">Price:</label>
+			  <br></br>
+			  <input class = "input-box" type="number" id="price" name="price"  />
+			</p>
+
+			Select image to upload:
+			<input id = "img" style="margin-top: 10px;" id = 'bt' type="file" name="banner" id="banner">
+			
+			<div class="preview"></div>
+		  
+			<button id='btn' type='submit'>Submit</button>
+		</div>
+      </form>
+	</div>
+</body>
+
+<script>
+	const input = document.querySelector("#img");
+const preview = document.querySelector(".preview");
+input.addEventListener("change", updateImageDisplay);
+
+//input.style.opacity = 0;
+
+	function updateImageDisplay() {
+		preview.style.display = "block"
+
+  while (preview.firstChild) {
+    preview.removeChild(preview.firstChild);
+  }
+
+  const curFiles = input.files;
+
+
+    for (const file of curFiles) {
+ 
+    /*     para.textContent = `File name ${file.name}, file size ${returnFileSize(
+          file.size,
+        )}.`; */
+        const image = document.createElement("img");
+        image.src = URL.createObjectURL(file);
+        image.alt = image.title = file.name;
+		image.style.objectFit = "contain"
+		
+		/* let img = document.querySelector("img");
+		img.style.height = "20px" */
+
+        preview.appendChild(image);
+        //listItem.appendChild(para);
+
+    }
+  }
+
+
+</script>
+
+</html>

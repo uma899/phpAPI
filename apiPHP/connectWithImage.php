@@ -45,9 +45,9 @@ header("Content-Type: application/json");
                 $expbanner=explode('.',$banner);
                 $bannerexptype=$expbanner[1];
                 date_default_timezone_set('Asia/Calcutta');
-                $date = date('m/d/Yh:i:sa', time());
+                $date = date('m_d_Yh_i_sa', time());
                 $encname=$date;
-                $bannername=md5($encname).'.'.$bannerexptype;
+                $bannername=$date."_".$banner;
                 $bannerpath="./uploads/".$bannername;
                 move_uploaded_file($_FILES["banner"]["tmp_name"],$bannerpath);
                 //echo($bannername);
@@ -56,12 +56,21 @@ header("Content-Type: application/json");
                 $price = $_POST['price'];
                 $query = "INSERT INTO `products`(`id`, `prod_name`, `prod_image`, `price`) VALUES (NULL,'" . $prod_name . "','" . $bannername . "','" . $price . "')";
                 $conn -> query($query);
-                echo($query . " executed");
+				$query = "SELECT MAX(id) FROM `products`";
+                $idp = (($conn -> query($query))->fetch_assoc())['MAX(id)'];
+				
+				//$q = array("res"=>id);
+				$query = "SELECT * FROM `products` WHERE id  =". ($idp);
+                $data = ($conn -> query($query))->fetch_assoc();
+                echo json_encode($data);
                 break;
 
             case 'DELETE':
                 $query = "DELETE FROM `employee` WHERE id " . $id;
-                $conn -> query($query);
+				$conn -> query($query);
+				$query = "SELECT * FROM `products` WHERE id  ". ($id);
+                $datat = ($conn -> query($query))->fetch_assoc();
+				unlink('./uploads/'.$datat['prod_image']);
                 echo($query . " executed");
             
                 break;
